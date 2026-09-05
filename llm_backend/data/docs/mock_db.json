@@ -1,0 +1,132 @@
+{
+  "ORD-20001": {"status": "processing", "eta_days": 1},
+
+  "ORD-20002": {
+    "status": "processing",
+    "eta_days": 7,
+    "note": "Pre-order item"
+  },
+
+  "ORD-20003": {
+    "status": "processing",
+    "eta_days": 3,
+    "priority": "high"
+  },
+
+  "ORD-20004": {
+    "status": "shipped",
+    "carrier": "SF Express",
+    "tracking_number": "SF000111222",
+    "shipped_at": "2025-12-14"
+  },
+
+  "ORD-20005": {
+    "status": "shipped",
+    "carrier": "UPS",
+    "tracking_number": "UPS99887766",
+    "shipped_at": "2025-12-13",
+    "estimated_delivery_date": "2025-12-18"
+  },
+
+  "ORD-20006": {
+    "status": "shipped",
+    "carrier": "FedEx",
+    "tracking_number": "FDX123098",
+    "delay_reason": "Weather-related delay"
+  },
+
+  "ORD-20007": {
+    "status": "delivered",
+    "delivered_at": "2025-12-11",
+    "signed_by": "Front desk"
+  },
+
+  "ORD-20008": {
+    "status": "delivered",
+    "delivered_at": "2025-12-10",
+    "delivery_feedback": "Satisfied"
+  },
+
+  "ORD-20009": {
+    "status": "delivered",
+    "delivered_at": "2025-12-09",
+    "delivery_note": "Left at front door"
+  },
+
+  "ORD-20010": {
+    "status": "cancelled",
+    "cancelled_at": "2025-12-07",
+    "cancellation_reason": "Payment failure"
+  },
+
+  "ORD-20011": {
+    "status": "cancelled",
+    "cancelled_at": "2025-12-08",
+    "cancellation_reason": "Out of stock",
+    "refund_issued": true
+  },
+
+  "ORD-20012": {
+    "status": "returned",
+    "delivered_at": "2025-12-05",
+    "return_requested_at": "2025-12-06",
+    "return_status": "pending"
+  },
+
+  "ORD-20013": {
+    "status": "returned",
+    "delivered_at": "2025-12-04",
+    "return_requested_at": "2025-12-05",
+    "return_status": "approved",
+    "return_reason": "Changed mind"
+  },
+
+  "ORD-20014": {
+    "status": "returned",
+    "delivered_at": "2025-12-03",
+    "return_requested_at": "2025-12-04",
+    "return_status": "completed",
+    "refund_amount": 299.99
+  },
+
+  "ORD-20015": {
+    "status": "refund_only",
+    "refund_requested_at": "2025-12-06",
+    "refund_reason": "Price adjustment request",
+    "refund_amount": 50
+  },
+
+  "ORD-20016": {
+    "status": "shipped",
+    "carrier": "DHL",
+    "tracking_number": "DHL000999",
+    "international": true,
+    "customs_status": "cleared"
+  },
+
+  "ORD-20017": {
+    "status": "shipped",
+    "carrier": "DHL",
+    "tracking_number": "DHL001000",
+    "international": true,
+    "customs_status": "held at customs"
+  },
+
+  "ORD-20018": {
+    "status": "delivered",
+    "delivered_at": "2025-12-02",
+    "issue_reported": true,
+    "issue_type": "Damaged item"
+  },
+
+  "ORD-20019": {
+    "status": "unknown",
+    "note": "Order status sync error"
+  },
+
+  "ORD-20020": {
+    "status": "processing",
+    "eta_days": null,
+    "note": "System issue, pending manual review"
+  }
+}

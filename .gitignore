@@ -1,0 +1,39 @@
+# ==== Secrets(切勿提交)====
+.env
+**/.env
+*.key
+
+# ==== Python 虚拟环境 / 缓存 ====
+venv/
+venv311/
+**/venv/
+**/.venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# ==== 日志 ====
+logs/
+**/logs/
+*.log
+
+# ==== 运行时数据 / 上传 / 向量库 ====
+llm_backend/uploads/
+llm_backend/data/uploads/
+llm_backend/data/vector_store/
+**/data/uploads/
+**/vector_store/
+
+# ==== GraphRAG 缓存/输出 ====
+llm_backend/app/graphrag/output/
+llm_backend/app/graphrag/cache/
+llm_backend/app/graphrag/**/*.parquet
+
+# ==== 系统 / 编辑器 ====
+.DS_Store
+**/.DS_Store
+.vscode/
+.idea/
+node_modules/

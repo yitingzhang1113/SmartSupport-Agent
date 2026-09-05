@@ -1,0 +1,17 @@
+# Licensed under the MIT License
+
+"""String utilities."""
+
+import html
+import re
+from typing import Any
+
+
+def clean_str(input: Any) -> str:
+    """Clean an input string by removing HTML escapes, control characters, and other unwanted characters."""
+    # If we get non-string input, just give it back
+    if not isinstance(input, str):
+        return input
+
+    result = html.unescape(input.strip())
+    return re.sub(r"[\x00-\x1f\x7f-\x9f]", "", result)

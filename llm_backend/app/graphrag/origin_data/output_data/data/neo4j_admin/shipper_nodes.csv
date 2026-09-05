@@ -1,0 +1,11 @@
+shipperId:ID(Shipper),CompanyName,Phone,labels:LABEL
+1,UPS,910-766-0123,Shipper
+2,FedEx,(449)756-9077,Shipper
+3,USPS,001-868-407-7900,Shipper
+4,DHL Express,806.267.5617x6101,Shipper
+5,Amazon Logistics,567-801-0518x10385,Shipper
+6,OnTrac,376.598.9287,Shipper
+7,LaserShip,001-737-665-1796x0152,Shipper
+8,Pitney Bowes,6966928509,Shipper
+9,XPO Logistics,(202)291-0961,Shipper
+10,Ryder,001-546-240-6336,Shipper

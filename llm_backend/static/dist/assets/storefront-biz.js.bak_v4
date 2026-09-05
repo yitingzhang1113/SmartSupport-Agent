@@ -1,0 +1,379 @@
+/*
+ * SmartShop 商城交互层(注入,不改压缩 JS)。两条线:
+ *   商城浏览 —— 商品/分类/搜索 → /api/products 直读 Business_data,展示网格/详情(不走 LLM)。
+ *   客服对话 —— 常驻悬浮客服 / 咨询按钮 → /api/langgraph/query(AI agent 读 Business_data)。
+ * 另含:购物车(localStorage)+ 结算、列表分页、按品类图标。
+ */
+(function () {
+  "use strict";
+
+  var BASE = "http://localhost:8010";
+  var API_PRODUCTS = BASE + "/api/products";
+  var API_DETAIL = BASE + "/api/products/detail";
+  var API_CHAT = BASE + "/api/langgraph/query";
+  var PAGE = 12;
+
+  var ICON = {
+    "Smart Speaker": "🔊", "Smart Display": "🖥️", "Smart Thermostat": "🌡️", "Smart Doorbell": "🔔",
+    "Smart Camera": "📷", "Smart Lock": "🔒", "Smart Plug": "🔌", "Smart Lighting": "💡",
+    "Robot Vacuum": "🤖", "Air Purifier": "🌀", "Security System": "🛡️", "Streaming Device": "📡",
+    "Smart TV": "📺", "Home Hub": "🏠", "Smart Sensor": "📶"
+  };
+  function icon(cat) { return ICON[cat] || "📦"; }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function money(n) {
+    return "¥" + (Number(n) || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function stockText(s) {
+    if (s <= 0) return '<span class="biz-oos">缺货</span>';
+    if (s < 20) return '<span class="biz-low">仅剩 ' + s + " 件</span>";
+    return '<span class="biz-ok">库存 ' + s + " 件</span>";
+  }
+
+  // ---------- 购物车(localStorage)----------
+  function loadCart() { try { return JSON.parse(localStorage.getItem("biz_cart") || "[]"); } catch (e) { return []; } }
+  function saveCart(c) { localStorage.setItem("biz_cart", JSON.stringify(c)); updateCartBadge(); }
+  var cart = loadCart();
+  function cartCount() { return cart.reduce(function (a, b) { return a + b.qty; }, 0); }
+  function cartTotal() { return cart.reduce(function (a, b) { return a + b.qty * b.price; }, 0); }
+  function addToCart(name, price, category) {
+    var it = cart.find(function (x) { return x.name === name; });
+    if (it) it.qty++;
+    else cart.push({ name: name, price: Number(price) || 0, category: category || "", qty: 1 });
+    saveCart(cart);
+    toast("已加入购物车:" + name);
+  }
+
+  // ---------- 弹层 ----------
+  var overlay, titleEl, bodyEl, footEl, inputEl;
+  function ensureModal() {
+    if (overlay) return;
+    overlay = document.createElement("div");
+    overlay.id = "biz-modal-overlay";
+    overlay.innerHTML =
+      '<div id="biz-modal"><div id="biz-modal-head"><span id="biz-modal-title"></span><span id="biz-modal-close">&times;</span></div>' +
+      '<div id="biz-modal-body"></div>' +
+      '<div id="biz-modal-foot"><input id="biz-modal-input" type="text" placeholder="输入您的问题…"/><button id="biz-modal-send">发送</button></div></div>';
+    document.body.appendChild(overlay);
+    titleEl = overlay.querySelector("#biz-modal-title");
+    bodyEl = overlay.querySelector("#biz-modal-body");
+    footEl = overlay.querySelector("#biz-modal-foot");
+    inputEl = overlay.querySelector("#biz-modal-input");
+    overlay.querySelector("#biz-modal-close").addEventListener("click", hide);
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) hide(); });
+    overlay.querySelector("#biz-modal-send").addEventListener("click", sendChat);
+    inputEl.addEventListener("keydown", function (e) { if (e.key === "Enter") sendChat(); });
+  }
+  function open(title, mode) {
+    ensureModal();
+    titleEl.textContent = title;
+    footEl.style.display = mode === "chat" ? "flex" : "none";
+    overlay.style.display = "flex";
+  }
+  function hide() { if (overlay) overlay.style.display = "none"; }
+  function toast(msg) {
+    var t = document.createElement("div"); t.className = "biz-toast"; t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function () { t.classList.add("show"); }, 10);
+    setTimeout(function () { t.classList.remove("show"); setTimeout(function () { t.remove(); }, 300); }, 1800);
+  }
+
+  // ================= 商城浏览 =================
+  function showDetail(name) {
+    open("商品详情", "browse");
+    bodyEl.innerHTML = '<div class="biz-loading">加载中…</div>';
+    fetch(API_DETAIL + "?name=" + encodeURIComponent(name))
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (p) {
+        bodyEl.innerHTML =
+          '<div class="biz-detail"><div class="biz-d-hero">' + icon(p.category) + "</div>" +
+          '<div class="biz-d-name">' + esc(p.name) + "</div>" +
+          '<div class="biz-d-tags"><span class="biz-tag">' + esc(p.category) + '</span><span class="biz-tag biz-tag2">' + esc(p.supplier) + "</span></div>" +
+          '<div class="biz-d-price">' + money(p.price) + "</div>" +
+          '<div class="biz-d-row">库存:' + stockText(p.stock) + "</div>" +
+          (p.quantityPerUnit ? '<div class="biz-d-row">规格:' + esc(p.quantityPerUnit) + "</div>" : "") +
+          '<div class="biz-d-actions">' +
+          '<button class="biz-btn biz-btn-primary" data-act="cart" data-name="' + esc(p.name) + '" data-price="' + p.price + '" data-cat="' + esc(p.category) + '">🛒 加入购物车</button>' +
+          '<button class="biz-btn biz-btn-ghost" data-act="ask" data-name="' + esc(p.name) + '">💬 咨询这款商品</button></div></div>';
+      })
+      .catch(function () { bodyEl.innerHTML = '<div class="biz-loading">未找到该商品</div>'; });
+  }
+
+  var listState = { items: [], shown: 0, title: "" };
+  function renderListPage() {
+    var slice = listState.items.slice(0, listState.shown);
+    var html = '<div class="biz-grid-info">共 ' + listState.items.length + ' 件商品</div><div class="biz-grid">';
+    slice.forEach(function (p) {
+      html += '<div class="biz-gcard" data-name="' + esc(p.name) + '">' +
+        '<div class="biz-g-ico">' + icon(p.category) + "</div>" +
+        '<div class="biz-g-name">' + esc(p.name) + "</div>" +
+        '<div class="biz-g-cat">' + esc(p.category) + "</div>" +
+        '<div class="biz-g-bottom"><span class="biz-g-price">' + money(p.price) + '</span><span class="biz-g-stock">' + stockText(p.stock) + "</span></div>" +
+        '<button class="biz-btn biz-btn-primary biz-g-cart" data-act="cart" data-name="' + esc(p.name) + '" data-price="' + p.price + '" data-cat="' + esc(p.category) + '">加入购物车</button></div>';
+    });
+    html += "</div>";
+    if (listState.shown < listState.items.length)
+      html += '<div class="biz-more"><button class="biz-btn biz-btn-ghost" id="biz-loadmore">加载更多(还有 ' + (listState.items.length - listState.shown) + " 件)</button></div>";
+    bodyEl.innerHTML = html;
+    var lm = document.getElementById("biz-loadmore");
+    if (lm) lm.addEventListener("click", function () { listState.shown += PAGE; renderListPage(); });
+  }
+  function showList(title, params) {
+    open(title, "browse");
+    bodyEl.innerHTML = '<div class="biz-loading">加载中…</div>';
+    fetch(API_PRODUCTS + "?" + params + "&limit=200")
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var items = (d && d.items) || [];
+        if (!items.length) { bodyEl.innerHTML = '<div class="biz-loading">没有找到相关商品</div>'; return; }
+        listState = { items: items, shown: Math.min(PAGE, items.length), title: title };
+        renderListPage();
+      })
+      .catch(function () { bodyEl.innerHTML = '<div class="biz-loading">加载失败,请重试</div>'; });
+  }
+
+  // ================= 购物车 & 结算 =================
+  function openCart() {
+    open("购物车", "browse");
+    if (!cart.length) { bodyEl.innerHTML = '<div class="biz-loading">购物车是空的,快去挑选商品吧~</div>'; return; }
+    var html = '<div class="biz-cart">';
+    cart.forEach(function (it, i) {
+      html += '<div class="biz-crow"><div class="biz-cico">' + icon(it.category) + "</div>" +
+        '<div class="biz-cinfo"><div class="biz-cname">' + esc(it.name) + '</div><div class="biz-cprice">' + money(it.price) + "</div></div>" +
+        '<div class="biz-cqty"><button class="biz-qbtn" data-cart="dec" data-i="' + i + '">-</button><span>' + it.qty + '</span><button class="biz-qbtn" data-cart="inc" data-i="' + i + '">+</button></div>' +
+        '<button class="biz-cdel" data-cart="del" data-i="' + i + '">删除</button></div>';
+    });
+    html += "</div>" +
+      '<div class="biz-cfoot"><div class="biz-ctotal">合计:<b>' + money(cartTotal()) + '</b></div>' +
+      '<button class="biz-btn biz-btn-primary" data-cart="checkout">去结算(' + cartCount() + " 件)</button></div>";
+    bodyEl.innerHTML = html;
+  }
+  function checkout() {
+    if (!cart.length) return;
+    var n = cartCount(), amt = money(cartTotal());
+    cart = []; saveCart(cart);
+    bodyEl.innerHTML = '<div class="biz-done"><div class="biz-done-ico">✅</div><div class="biz-done-t">下单成功!</div>' +
+      '<div class="biz-done-s">共 ' + n + " 件商品,合计 " + amt + "<br>感谢您的购买,我们会尽快为您发货 🚚</div>" +
+      '<button class="biz-btn biz-btn-primary" data-cart="close">继续购物</button></div>';
+  }
+
+  // ================= 客服对话 =================
+  function openChat(greeting) {
+    open("智能客服", "chat");
+    if (!bodyEl.dataset.chat) {
+      bodyEl.innerHTML = ""; bodyEl.dataset.chat = "1";
+      bubble("assistant", greeting || "您好!我是智能客服,可帮您查询产品、订单、退换货政策等。请问有什么可以帮您?");
+    }
+  }
+  function bubble(role, text) {
+    var b = document.createElement("div"); b.className = "biz-bubble biz-" + role; b.textContent = text;
+    bodyEl.appendChild(b); bodyEl.scrollTop = bodyEl.scrollHeight; return b;
+  }
+  function sendChat() { var q = (inputEl.value || "").trim(); if (!q) return; inputEl.value = ""; askAgent(q); }
+  function askAgent(question) {
+    if (!bodyEl.dataset.chat) { bodyEl.innerHTML = ""; bodyEl.dataset.chat = "1"; }
+    bubble("user", question);
+    var ans = bubble("assistant", "正在思考…"); var acc = "";
+    var fd = new FormData(); fd.append("query", question); fd.append("user_id", localStorage.getItem("user_id") || "1");
+    fetch(API_CHAT, { method: "POST", body: fd })
+      .then(function (resp) {
+        if (!resp.ok || !resp.body) throw new Error("HTTP " + resp.status);
+        var reader = resp.body.getReader(), dec = new TextDecoder(), buf = "";
+        function pump() {
+          return reader.read().then(function (r) {
+            if (r.done) return;
+            buf += dec.decode(r.value, { stream: true });
+            var parts = buf.split("\n"); buf = parts.pop() || "";
+            for (var i = 0; i < parts.length; i++) {
+              var ln = parts[i]; if (ln.indexOf("data: ") !== 0) continue;
+              var B = ln.slice(6); if (B === "[DONE]") continue;
+              if (B.charAt(0) === '"' && B.charAt(B.length - 1) === '"' && B.length >= 2) B = B.slice(1, -1);
+              B = B.replace(/\\n\\n/g, "\n\n").replace(/\\n/g, "\n").replace(/\\"/g, '"');
+              acc += B; acc = acc.replace(/\{\s*["']\s*(done|interruption|error|decision)\s*["'][\s\S]*?\}/g, "");
+              if (acc.trim()) ans.textContent = acc; bodyEl.scrollTop = bodyEl.scrollHeight;
+            }
+            return pump();
+          });
+        }
+        return pump();
+      })
+      .then(function () { if (!acc.trim()) ans.textContent = "(未获取到回复)"; })
+      .catch(function (err) { ans.textContent = "抱歉,查询出错:" + err.message; });
+  }
+
+  var CN2EN = {
+    "智能音箱": "Smart Speaker", "音箱": "Smart Speaker", "智能显示器": "Smart Display", "智能屏": "Smart Display",
+    "智能恒温器": "Smart Thermostat", "恒温器": "Smart Thermostat", "智能门铃": "Smart Doorbell", "门铃": "Smart Doorbell",
+    "智能摄像头": "Smart Camera", "摄像头": "Smart Camera", "摄像机": "Smart Camera", "智能门锁": "Smart Lock",
+    "门锁": "Smart Lock", "锁": "Smart Lock", "智能插座": "Smart Plug", "插座": "Smart Plug", "智能照明": "Smart Lighting",
+    "智能灯": "Smart Lighting", "灯": "Smart Lighting", "扫地机器人": "Robot Vacuum", "扫地机": "Robot Vacuum",
+    "吸尘器": "Robot Vacuum", "空气净化器": "Air Purifier", "净化器": "Air Purifier", "安防系统": "Security System",
+    "安防": "Security System", "流媒体": "Streaming Device", "智能电视": "Smart TV", "电视": "Smart TV",
+    "家庭中枢": "Home Hub", "中枢": "Home Hub", "传感器": "Smart Sensor"
+  };
+  function toEnCategory(q) {
+    if (!q) return null; if (CN2EN[q]) return CN2EN[q];
+    var keys = Object.keys(CN2EN).sort(function (a, b) { return b.length - a.length; });
+    for (var i = 0; i < keys.length; i++) if (q.indexOf(keys[i]) >= 0) return CN2EN[keys[i]];
+    return null;
+  }
+  function findProductCard(el) {
+    for (var i = 0; i < 6 && el; i++) {
+      if (el.querySelector) {
+        var h = el.querySelector("h3");
+        if (h && h.textContent.trim() && (el.querySelector("img") || /[¥$]\s*\d/.test(el.textContent || ""))) return h.textContent.trim();
+      }
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  // ================= 事件委托 =================
+  document.addEventListener("click", function (e) {
+    var t = e.target; if (!t || !t.closest) return;
+
+    // 购物车动作
+    var cc = t.closest("[data-cart]");
+    if (cc) {
+      e.preventDefault();
+      var act = cc.getAttribute("data-cart"), i = parseInt(cc.getAttribute("data-i"), 10);
+      if (act === "inc") { cart[i].qty++; saveCart(cart); openCart(); }
+      else if (act === "dec") { cart[i].qty--; if (cart[i].qty <= 0) cart.splice(i, 1); saveCart(cart); openCart(); }
+      else if (act === "del") { cart.splice(i, 1); saveCart(cart); openCart(); }
+      else if (act === "checkout") checkout();
+      else if (act === "close") hide();
+      return;
+    }
+    // 悬浮按钮
+    if (t.closest("#biz-fab-cart")) { e.preventDefault(); openCart(); return; }
+    if (t.closest("#biz-fab-cs")) { e.preventDefault(); openChat(); return; }
+
+    // 商品动作按钮
+    var ab = t.closest("[data-act]");
+    if (ab) {
+      e.preventDefault();
+      var an = ab.getAttribute("data-name");
+      if (ab.getAttribute("data-act") === "cart") addToCart(an, ab.getAttribute("data-price"), ab.getAttribute("data-cat"));
+      else if (ab.getAttribute("data-act") === "ask") { openChat(); askAgent("请介绍一下「" + an + "」的价格、库存和特点。"); }
+      return;
+    }
+    // 网格卡 -> 详情
+    var gcard = t.closest(".biz-gcard");
+    if (gcard && overlay && overlay.contains(gcard)) { e.preventDefault(); showDetail(gcard.getAttribute("data-name")); return; }
+
+    // 页面 Add to Cart
+    var pcart = t.closest(".add-to-cart-btn");
+    if (pcart) {
+      e.preventDefault();
+      var pn = findProductCard(pcart);
+      if (pn) fetch(API_DETAIL + "?name=" + encodeURIComponent(pn)).then(function (r) { return r.json(); })
+        .then(function (p) { addToCart(p.name, p.price, p.category); }).catch(function () { addToCart(pn, 0, ""); });
+      return;
+    }
+    // 客服入口
+    var link = t.closest("a, [class*='live-chat'], [class*='customer']");
+    if (link) {
+      var label = (link.textContent || "").trim(), cls = link.className || "";
+      if (/AI Assistant|Live Chat|Customer Support|客服|咨询/i.test(label) || /live|customer/i.test(cls)) { e.preventDefault(); openChat(); return; }
+      if (link.tagName === "A" && link.closest(".links-list") && label) { e.preventDefault(); showList(label, "category=" + encodeURIComponent(label)); return; }
+      if (link.tagName === "A" && /Best Sellers|Deals|New Arrivals|Home/i.test(label)) { e.preventDefault(); showList("全部商品", "limit=200"); return; }
+    }
+    // 顶部购物车链接
+    if (/(^|\s)(My )?Cart(\s|$)/i.test((t.closest("a,div,span,button") || {}).textContent || "") && (t.closest("[class*='cart']") || /cart/i.test((t.textContent||"")))) {
+      // 交给下面 fab 逻辑;此处不强拦,避免误伤
+    }
+    // 侧栏分类
+    var catLi = t.closest(".category-list li");
+    if (catLi) { e.preventDefault(); var cat = catLi.textContent.replace(/[^\x00-\x7F]/g, "").trim(); if (cat) showList(cat, "category=" + encodeURIComponent(cat)); return; }
+    // 搜索
+    var sb = t.closest("button");
+    if (sb && sb.textContent.trim() === "Search") {
+      e.preventDefault();
+      var si = document.querySelector('input[placeholder*="Search"]'); var q = si && si.value.trim();
+      var en = q ? toEnCategory(q) : null;
+      showList(q ? "搜索:" + q : "全部商品", q ? "q=" + encodeURIComponent(en || q) : "limit=200");
+      return;
+    }
+    // 页面商品卡 -> 详情
+    var pname = findProductCard(t);
+    if (pname && !(overlay && overlay.contains(t))) { e.preventDefault(); showDetail(pname); }
+  }, true);
+
+  // ---------- 悬浮按钮(常驻客服 + 购物车)----------
+  var fab, badgeEl;
+  function ensureFab() {
+    if (fab) return;
+    fab = document.createElement("div");
+    fab.id = "biz-fab";
+    fab.innerHTML =
+      '<button id="biz-fab-cart" title="购物车">🛒<span id="biz-fab-badge">0</span></button>' +
+      '<button id="biz-fab-cs" title="智能客服">💬<span class="biz-fab-label">客服</span></button>';
+    document.body.appendChild(fab);
+    badgeEl = document.getElementById("biz-fab-badge");
+    updateCartBadge();
+  }
+  function updateCartBadge() {
+    if (!badgeEl) return;
+    var n = cartCount();
+    badgeEl.textContent = n; badgeEl.style.display = n > 0 ? "flex" : "none";
+  }
+
+  // ---------- 样式 ----------
+  var css = document.createElement("style");
+  css.textContent =
+    "#biz-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99999;align-items:center;justify-content:center;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}" +
+    "#biz-modal{background:#fff;width:min(640px,94vw);max-height:82vh;border-radius:14px;display:flex;flex-direction:column;box-shadow:0 12px 48px rgba(0,0,0,.3);overflow:hidden}" +
+    "#biz-modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#3b5bfd;color:#fff}" +
+    "#biz-modal-title{font-weight:600;font-size:15px}#biz-modal-close{cursor:pointer;font-size:22px;line-height:1;opacity:.9}" +
+    "#biz-modal-body{padding:16px;overflow-y:auto;flex:1;background:#f7f8fa;min-height:120px}" +
+    ".biz-loading{color:#888;text-align:center;padding:40px 0;font-size:14px}" +
+    ".biz-detail{background:#fff;border:1px solid #eee;border-radius:12px;padding:22px;text-align:center}" +
+    ".biz-d-hero{font-size:56px;margin-bottom:10px}" +
+    ".biz-d-name{font-size:19px;font-weight:700;color:#1a1a1a;margin-bottom:10px}" +
+    ".biz-d-tags{margin-bottom:14px}.biz-tag{display:inline-block;background:#eef1ff;color:#3b5bfd;font-size:12px;padding:3px 10px;border-radius:20px;margin:0 3px}.biz-tag2{background:#f0f0f2;color:#666}" +
+    ".biz-d-price{font-size:26px;font-weight:800;color:#e4393c;margin-bottom:12px}" +
+    ".biz-d-row{font-size:14px;color:#444;margin:6px 0}.biz-ok{color:#2ca01c}.biz-low{color:#e08a00}.biz-oos{color:#c00}" +
+    ".biz-d-actions{margin-top:18px;display:flex;gap:10px;justify-content:center}" +
+    ".biz-btn{border:none;border-radius:8px;cursor:pointer;font-size:14px;padding:10px 16px}" +
+    ".biz-btn-primary{background:#3b5bfd;color:#fff}.biz-btn-primary:hover{background:#2f49d0}" +
+    ".biz-btn-ghost{background:#fff;color:#3b5bfd;border:1px solid #3b5bfd}.biz-btn-ghost:hover{background:#eef1ff}" +
+    ".biz-grid-info{font-size:13px;color:#888;margin-bottom:12px}" +
+    ".biz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}" +
+    ".biz-gcard{background:#fff;border:1px solid #eee;border-radius:10px;padding:14px;cursor:pointer;transition:box-shadow .15s;display:flex;flex-direction:column}.biz-gcard:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}" +
+    ".biz-g-ico{font-size:34px;text-align:center;margin-bottom:8px}" +
+    ".biz-g-name{font-size:13px;font-weight:600;color:#222;margin-bottom:4px;line-height:1.3}" +
+    ".biz-g-cat{font-size:11px;color:#999;margin-bottom:8px}" +
+    ".biz-g-bottom{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;margin-top:auto}" +
+    ".biz-g-price{font-size:15px;font-weight:700;color:#e4393c}.biz-g-stock{font-size:11px}" +
+    ".biz-g-cart{width:100%;padding:7px;font-size:13px}" +
+    ".biz-more{text-align:center;margin-top:14px}" +
+    ".biz-cart{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #eee}" +
+    ".biz-crow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #f0f0f0}" +
+    ".biz-cico{font-size:28px}.biz-cinfo{flex:1}.biz-cname{font-size:14px;font-weight:600;color:#222}.biz-cprice{font-size:13px;color:#e4393c;margin-top:2px}" +
+    ".biz-cqty{display:flex;align-items:center;gap:8px}.biz-qbtn{width:26px;height:26px;border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;font-size:15px}" +
+    ".biz-cdel{background:none;border:none;color:#999;cursor:pointer;font-size:13px}.biz-cdel:hover{color:#e4393c}" +
+    ".biz-cfoot{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:4px}" +
+    ".biz-ctotal{font-size:15px;color:#333}.biz-ctotal b{color:#e4393c;font-size:20px}" +
+    ".biz-done{text-align:center;padding:36px 16px}.biz-done-ico{font-size:56px}.biz-done-t{font-size:20px;font-weight:700;margin:12px 0 8px}.biz-done-s{color:#666;font-size:14px;line-height:1.7;margin-bottom:20px}" +
+    "#biz-modal-foot{display:flex;gap:8px;padding:12px;border-top:1px solid #eee;background:#fff}" +
+    "#biz-modal-input{flex:1;padding:10px 12px;border:1px solid #d6d9de;border-radius:8px;font-size:14px;outline:none}#biz-modal-input:focus{border-color:#3b5bfd}" +
+    "#biz-modal-send{padding:0 18px;background:#3b5bfd;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px}" +
+    ".biz-bubble{padding:10px 13px;border-radius:10px;margin:6px 0;max-width:88%;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.55}" +
+    ".biz-user{background:#3b5bfd;color:#fff;margin-left:auto}.biz-assistant{background:#fff;color:#222;border:1px solid #e6e8eb;margin-right:auto}" +
+    ".biz-toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;z-index:100000;opacity:0;transition:all .3s}.biz-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}" +
+    "#biz-fab{position:fixed;right:22px;bottom:22px;z-index:99998;display:flex;flex-direction:column;gap:12px}" +
+    "#biz-fab button{position:relative;border:none;cursor:pointer;border-radius:50%;width:56px;height:56px;font-size:24px;box-shadow:0 6px 20px rgba(0,0,0,.25);color:#fff;display:flex;align-items:center;justify-content:center}" +
+    "#biz-fab-cart{background:#ff8c1a}#biz-fab-cs{background:#3b5bfd;flex-direction:column;font-size:20px}" +
+    ".biz-fab-label{font-size:10px;margin-top:-2px}" +
+    "#biz-fab-badge{position:absolute;top:-2px;right:-2px;background:#e4393c;color:#fff;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px}";
+  document.head.appendChild(css);
+
+  if (document.body) ensureFab();
+  else document.addEventListener("DOMContentLoaded", ensureFab);
+  setTimeout(ensureFab, 800);
+})();

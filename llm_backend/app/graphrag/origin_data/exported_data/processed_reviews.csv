@@ -1,0 +1,271 @@
+ReviewID,ProductID,CustomerID,Rating,ReviewDate,text,token_count,CategoryName,ProductName,CompanyName
+7,23,DQ379,2.7,2026-05-14,"Customer ID: DQ379
+Customer Company: Williams-ClayReal Estate Company
+Customer Location: Maryport, United States
+Product Info: Belkin Wemo Smart Lock Plus (Category: Smart Lock)
+Manufacturer: Belkin Wemo
+Product Price: 128.88
+Rating: 2.7 stars
+Review Date: 2026-05-14
+Review Content: ""I would not recommend this Smart Lock. It has unclear video quality, and I was disappointed.""",82,Smart Lock,Belkin Wemo Smart Lock Plus,Williams-ClayReal Estate Company
+15,91,FX291,1.3,2026-05-07,"Customer ID: FX291
+Customer Company: Robinson-HudsonSecurity Service Provider
+Customer Location: New Elijahview, United States
+Product Info: Ring Smart TV Premium (Category: Smart TV)
+Manufacturer: Ring
+Product Price: 4258.18
+Rating: 1.3 stars
+Review Date: 2026-05-07
+Review Content: ""The issue with setup process is very frustrating. It is not worth the price.""",78,Smart TV,Ring Smart TV Premium,Robinson-HudsonSecurity Service Provider
+16,74,WX991,3.7,2026-03-29,"Customer ID: WX991
+Customer Company: Wood, Berg and WatsonOnline Marketplace Seller
+Customer Location: Johntown, United States
+Product Info: LG Electronics Smart Lock Standard (Category: Smart Lock)
+Manufacturer: LG Electronics
+Product Price: 6262.29
+Rating: 3.7 stars
+Review Date: 2026-03-29
+Review Content: ""The quality of this Smart Lock is acceptable. It has long battery life, but the voice assistant integration could be better.""",89,Smart Lock,LG Electronics Smart Lock Standard,"Wood, Berg and WatsonOnline Marketplace Seller"
+26,66,IH506,4.5,2026-02-19,"Customer ID: IH506
+Customer Company: Flores-MartinFacility Management Company
+Customer Location: Benjaminshire, United States
+Product Info: Google Nest Smart Doorbell Mini (Category: Smart Doorbell)
+Manufacturer: Google Nest
+Product Price: 3252.06
+Rating: 4.5 stars
+Review Date: 2026-02-19
+Review Content: ""This Smart Doorbell works really well and has great value for the price. Overall, I am very happy with it.""",86,Smart Doorbell,Google Nest Smart Doorbell Mini,Flores-MartinFacility Management Company
+29,85,DQ379,3.0,2026-02-12,"Customer ID: DQ379
+Customer Company: Williams-ClayReal Estate Company
+Customer Location: Maryport, United States
+Product Info: Wyze Home Hub Outdoor (Category: Home Hub)
+Manufacturer: Wyze
+Product Price: 3005.03
+Rating: 3.0 stars
+Review Date: 2026-02-12
+Review Content: ""After using it for a while, This product Wyze Home Hub Outdoorhas acceptable quality.One thing I liked is its fast response time.In addition, its performance is only average for apartment living.I hope the manufacturer improves these issues.""",107,Home Hub,Wyze Home Hub Outdoor,Williams-ClayReal Estate Company
+24,33,RJ729,3.6,2026-02-10,"Customer ID: RJ729
+Customer Company: Miller, Meza and ThompsonIT Services Company
+Customer Location: New Charles, United States
+Product Info: Honeywell Home Smart Plug Pro (Category: Smart Plug)
+Manufacturer: Honeywell Home
+Product Price: 1580.28
+Rating: 3.6 stars
+Review Date: 2026-02-10
+Review Content: ""After comparing several similar products, This Smart Plugoffers average value for the money.after one month of use, the energy-saving mode feature worked fairly well.However, one drawback is its confusing setup process.I would not really recommend it.""",114,Smart Plug,Honeywell Home Smart Plug Pro,"Miller, Meza and ThompsonIT Services Company"
+21,21,VB832,3.5,2026-02-04,"Customer ID: VB832
+Customer Company: Holland, Velez and MathewsFacility Management Company
+Customer Location: Pottsmouth, United States
+Product Info: Google Nest Streaming Device Standard (Category: Streaming Device)
+Manufacturer: Google Nest
+Product Price: 7565.95
+Rating: 3.5 stars
+Review Date: 2026-02-04
+Review Content: ""This product has both pros and cons. It has fast response time, but also has poor app experience.""",86,Streaming Device,Google Nest Streaming Device Standard,"Holland, Velez and MathewsFacility Management Company"
+18,86,DP127,1.2,2025-12-22,"Customer ID: DP127
+Customer Company: Steele-RussellHome Improvement Store
+Customer Location: Lake Craig, United States
+Product Info: Amazon Devices Smart Thermostat Mini (Category: Smart Thermostat)
+Manufacturer: Amazon Devices
+Product Price: 1860.35
+Rating: 1.2 stars
+Review Date: 2025-12-22
+Review Content: ""I am not satisfied with this Smart Thermostat. It has slow customer support, and it does not feel worth the money.""",88,Smart Thermostat,Amazon Devices Smart Thermostat Mini,Steele-RussellHome Improvement Store
+23,32,VX070,1.6,2025-12-09,"Customer ID: VX070
+Customer Company: Brown-GarciaSmart Home Installer
+Customer Location: South Danny, United States
+Product Info: Philips Hue Smart Lock Max (Category: Smart Lock)
+Manufacturer: Philips Hue
+Product Price: 1709.35
+Rating: 1.6 stars
+Review Date: 2025-12-09
+Review Content: ""The issue with motion detection accuracy is very frustrating. It is not worth the price.""",81,Smart Lock,Philips Hue Smart Lock Max,Brown-GarciaSmart Home Installer
+25,92,AZ726,4.6,2025-11-21,"Customer ID: AZ726
+Customer Company: Morris, Vasquez and ScottAppliance Retailer
+Customer Location: New James, United States
+Product Info: LG Electronics Streaming Device Indoor (Category: Streaming Device)
+Manufacturer: LG Electronics
+Product Price: 4692.06
+Rating: 4.6 stars
+Review Date: 2025-11-21
+Review Content: ""I have to say, This Streaming Devicehas been very reliable.That said, it is especially useful for energy management.It is slightly worse than other brands I have tried.If I had to mention one downside, the instructions could be clearer.You get what you pay for.""",120,Streaming Device,LG Electronics Streaming Device Indoor,"Morris, Vasquez and ScottAppliance Retailer"
+2,94,SI442,3.5,2025-10-07,"Customer ID: SI442
+Customer Company: Campbell-ThomasConsumer Electronics Store
+Customer Location: Caitlinview, United States
+Product Info: Ecobee Smart Plug Pro (Category: Smart Plug)
+Manufacturer: Ecobee
+Product Price: 2894.52
+Rating: 3.5 stars
+Review Date: 2025-10-07
+Review Content: ""As a first-time smart home buyer, This Smart Plughas both pros and cons.the experience during during bad weather was acceptable.Also, some minor problems became noticeable after extended use.The overall experience has been good.""",105,Smart Plug,Ecobee Smart Plug Pro,Campbell-ThomasConsumer Electronics Store
+22,74,SE733,2.8,2025-09-23,"Customer ID: SE733
+Customer Company: Lee GroupSmart Home Installer
+Customer Location: Lake Jerry, United States
+Product Info: LG Electronics Smart Lock Standard (Category: Smart Lock)
+Manufacturer: LG Electronics
+Product Price: 6262.29
+Rating: 2.8 stars
+Review Date: 2025-09-23
+Review Content: ""It stopped working after one week of use. It has unclear video quality, and customer support was slow.""",84,Smart Lock,LG Electronics Smart Lock Standard,Lee GroupSmart Home Installer
+1,85,DQ379,1.5,2025-09-14,"Customer ID: DQ379
+Customer Company: Williams-ClayReal Estate Company
+Customer Location: Maryport, United States
+Product Info: Wyze Home Hub Outdoor (Category: Home Hub)
+Manufacturer: Wyze
+Product Price: 3005.03
+Rating: 1.5 stars
+Review Date: 2025-09-14
+Review Content: ""The issue with setup process is very frustrating. It is not worth the price.""",77,Home Hub,Wyze Home Hub Outdoor,Williams-ClayReal Estate Company
+9,18,SE733,1.9,2025-07-21,"Customer ID: SE733
+Customer Company: Lee GroupSmart Home Installer
+Customer Location: Lake Jerry, United States
+Product Info: Belkin Wemo Smart Sensor Pro (Category: Smart Sensor)
+Manufacturer: Belkin Wemo
+Product Price: 3517.48
+Rating: 1.9 stars
+Review Date: 2025-07-21
+Review Content: ""To be honest, This Smart Sensordoes not work as expected.The problem with setup process is very frustrating.I hope the manufacturer fixes these issues.""",92,Smart Sensor,Belkin Wemo Smart Sensor Pro,Lee GroupSmart Home Installer
+17,26,DP127,2.8,2025-07-01,"Customer ID: DP127
+Customer Company: Steele-RussellHome Improvement Store
+Customer Location: Lake Craig, United States
+Product Info: TP-Link Kasa Smart TV Pro (Category: Smart TV)
+Manufacturer: TP-Link Kasa
+Product Price: 8662.59
+Rating: 2.8 stars
+Review Date: 2025-07-01
+Review Content: ""This product has serious issues. It has limited smart features, and I have already requested a return.""",88,Smart TV,TP-Link Kasa Smart TV Pro,Steele-RussellHome Improvement Store
+3,49,BI149,3.4,2025-06-29,"Customer ID: BI149
+Customer Company: Richard IncFacility Management Company
+Customer Location: New Grantfort, United States
+Product Info: Belkin Wemo Robot Vacuum Pro (Category: Robot Vacuum)
+Manufacturer: Belkin Wemo
+Product Price: 5699.41
+Rating: 3.4 stars
+Review Date: 2025-06-29
+Review Content: ""As a first-time smart home buyer, This Robot Vacuumdoes not really stand out.when using it on weekends, the app control feature worked fairly well.It is also worth mentioning that its performance is only average for family use.I suggest comparing it with other options before buying.""",119,Robot Vacuum,Belkin Wemo Robot Vacuum Pro,Richard IncFacility Management Company
+10,48,VN143,3.8,2025-06-11,"Customer ID: VN143
+Customer Company: Morales GroupConsumer Electronics Store
+Customer Location: Youngview, United States
+Product Info: Ecobee Smart Lighting Outdoor (Category: Smart Lighting)
+Manufacturer: Ecobee
+Product Price: 9320.67
+Rating: 3.8 stars
+Review Date: 2025-06-11
+Review Content: ""From my experience, This Smart Lightingis neither great nor terrible.the experience during during family movie nights was acceptable.What I liked most is that I noticed some issues with privacy settings.It feels worth the price.""",102,Smart Lighting,Ecobee Smart Lighting Outdoor,Morales GroupConsumer Electronics Store
+5,39,KW295,4.1,2025-05-31,"Customer ID: KW295
+Customer Company: Tate and SonsOnline Marketplace Seller
+Customer Location: Timothyside, United States
+Product Info: Samsung SmartThings Smart Doorbell Max (Category: Smart Doorbell)
+Manufacturer: Samsung SmartThings
+Product Price: 5101.28
+Rating: 4.1 stars
+Review Date: 2025-05-31
+Review Content: ""This Smart Doorbell works really well and has easy installation. Overall, I am very happy with it.""",83,Smart Doorbell,Samsung SmartThings Smart Doorbell Max,Tate and SonsOnline Marketplace Seller
+28,1,IH506,1.0,2025-04-28,"Customer ID: IH506
+Customer Company: Flores-MartinFacility Management Company
+Customer Location: Benjaminshire, United States
+Product Info: Apple Home Air Purifier Plus (Category: Air Purifier)
+Manufacturer: Apple Home
+Product Price: 8995.81
+Rating: 1.0 stars
+Review Date: 2025-04-28
+Review Content: ""After using it for a while, This Air Purifierhas been frustrating to use.It did not work properly during during family movie nights.I would not recommend it to other buyers.""",98,Air Purifier,Apple Home Air Purifier Plus,Flores-MartinFacility Management Company
+6,24,BI149,2.8,2025-04-27,"Customer ID: BI149
+Customer Company: Richard IncFacility Management Company
+Customer Location: New Grantfort, United States
+Product Info: TP-Link Kasa Smart Display Plus (Category: Smart Display)
+Manufacturer: TP-Link Kasa
+Product Price: 8981.74
+Rating: 2.8 stars
+Review Date: 2025-04-27
+Review Content: ""I would not recommend this Smart Display. It has confusing setup process, and I was disappointed.""",86,Smart Display,TP-Link Kasa Smart Display Plus,Richard IncFacility Management Company
+14,57,KW295,3.8,2025-04-24,"Customer ID: KW295
+Customer Company: Tate and SonsOnline Marketplace Seller
+Customer Location: Timothyside, United States
+Product Info: Belkin Wemo Smart Camera Essential (Category: Smart Camera)
+Manufacturer: Belkin Wemo
+Product Price: 9004.82
+Rating: 3.8 stars
+Review Date: 2025-04-24
+Review Content: ""It works fairly well during while cooking, but performance is average in other situations.""",79,Smart Camera,Belkin Wemo Smart Camera Essential,Tate and SonsOnline Marketplace Seller
+13,91,VN143,1.1,2025-04-05,"Customer ID: VN143
+Customer Company: Morales GroupConsumer Electronics Store
+Customer Location: Youngview, United States
+Product Info: Ring Smart TV Premium (Category: Smart TV)
+Manufacturer: Ring
+Product Price: 4258.18
+Rating: 1.1 stars
+Review Date: 2025-04-05
+Review Content: ""I must admit, This Smart TVdid not meet my expectations at all.Within a week of use, it started having performance problems.""",86,Smart TV,Ring Smart TV Premium,Morales GroupConsumer Electronics Store
+19,9,VB832,1.4,2025-04-04,"Customer ID: VB832
+Customer Company: Holland, Velez and MathewsFacility Management Company
+Customer Location: Pottsmouth, United States
+Product Info: Samsung SmartThings Smart Speaker Outdoor (Category: Smart Speaker)
+Manufacturer: Samsung SmartThings
+Product Price: 1447.2
+Rating: 1.4 stars
+Review Date: 2025-04-04
+Review Content: ""As a first-time smart home buyer, This product Samsung SmartThings Smart Speaker Outdooris very disappointing.The main issue is its limited smart features.I would not recommend it to other buyers.""",102,Smart Speaker,Samsung SmartThings Smart Speaker Outdoor,"Holland, Velez and MathewsFacility Management Company"
+30,17,DQ379,3.7,2024-11-21,"Customer ID: DQ379
+Customer Company: Williams-ClayReal Estate Company
+Customer Location: Maryport, United States
+Product Info: Eufy Air Purifier Indoor (Category: Air Purifier)
+Manufacturer: Eufy
+Product Price: 6740.87
+Rating: 3.7 stars
+Review Date: 2024-11-21
+Review Content: ""Overall, it is decent. It has simple app controls, but there is still room for improvement.""",81,Air Purifier,Eufy Air Purifier Indoor,Williams-ClayReal Estate Company
+20,51,UU972,2.4,2024-10-23,"Customer ID: UU972
+Customer Company: Valencia-TaylorReal Estate Company
+Customer Location: Port Alanside, United States
+Product Info: Amazon Devices Smart Speaker Plus (Category: Smart Speaker)
+Manufacturer: Amazon Devices
+Product Price: 4694.15
+Rating: 2.4 stars
+Review Date: 2024-10-23
+Review Content: ""I am not satisfied with this Smart Speaker. It has unclear instructions, and it does not feel worth the money.""",87,Smart Speaker,Amazon Devices Smart Speaker Plus,Valencia-TaylorReal Estate Company
+8,66,EM988,4.6,2024-09-22,"Customer ID: EM988
+Customer Company: Fowler-CraigIT Services Company
+Customer Location: Tonyaville, United States
+Product Info: Google Nest Smart Doorbell Mini (Category: Smart Doorbell)
+Manufacturer: Google Nest
+Product Price: 3252.06
+Rating: 4.6 stars
+Review Date: 2024-09-22
+Review Content: ""The Google Assistant support feature is especially helpful, making it very convenient for home security.""",80,Smart Doorbell,Google Nest Smart Doorbell Mini,Fowler-CraigIT Services Company
+11,77,SI442,2.4,2024-07-22,"Customer ID: SI442
+Customer Company: Campbell-ThomasConsumer Electronics Store
+Customer Location: Caitlinview, United States
+Product Info: Wyze Smart Plug Outdoor (Category: Smart Plug)
+Manufacturer: Wyze
+Product Price: 9913.58
+Rating: 2.4 stars
+Review Date: 2024-07-22
+Review Content: ""I noticed that This product Wyze Smart Plug Outdoordid not meet my expectations at all.The problem with Wi-Fi connectivity is very frustrating.This purchase was disappointing.""",93,Smart Plug,Wyze Smart Plug Outdoor,Campbell-ThomasConsumer Electronics Store
+4,61,KW295,4.9,2024-07-12,"Customer ID: KW295
+Customer Company: Tate and SonsOnline Marketplace Seller
+Customer Location: Timothyside, United States
+Product Info: Amazon Devices Air Purifier Ultra (Category: Air Purifier)
+Manufacturer: Amazon Devices
+Product Price: 414.6
+Rating: 4.9 stars
+Review Date: 2024-07-12
+Review Content: ""After using it, This Air Purifierhas great build quality.The biggest issue is that it works very well during during bad weather.If I had to mention one downside, the price is a little higher than expected.I hope the manufacturer improves these issues.""",113,Air Purifier,Amazon Devices Air Purifier Ultra,Tate and SonsOnline Marketplace Seller
+27,94,DP127,2.9,2024-06-24,"Customer ID: DP127
+Customer Company: Steele-RussellHome Improvement Store
+Customer Location: Lake Craig, United States
+Product Info: Ecobee Smart Plug Pro (Category: Smart Plug)
+Manufacturer: Ecobee
+Product Price: 2894.52
+Rating: 2.9 stars
+Review Date: 2024-06-24
+Review Content: ""I would not recommend this Smart Plug. It has unclear instructions, and I was disappointed.""",80,Smart Plug,Ecobee Smart Plug Pro,Steele-RussellHome Improvement Store
+12,82,SI442,4.0,2024-06-21,"Customer ID: SI442
+Customer Company: Campbell-ThomasConsumer Electronics Store
+Customer Location: Caitlinview, United States
+Product Info: Arlo Smart Lighting Mini (Category: Smart Lighting)
+Manufacturer: Arlo
+Product Price: 2035.89
+Rating: 4.0 stars
+Review Date: 2024-06-21
+Review Content: ""This Smart Lighting works really well and has reliable performance. Overall, I am very happy with it.""",81,Smart Lighting,Arlo Smart Lighting Mini,Campbell-ThomasConsumer Electronics Store
