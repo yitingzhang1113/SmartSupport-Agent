@@ -17,6 +17,8 @@ from langchain.retrievers import EnsembleRetriever, ContextualCompressionRetriev
 from langchain.retrievers.document_compressors import CrossEncoderReranker
 from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 
+import httpx
+from langchain_core.documents.compressor import BaseDocumentCompressor
 from langchain_openai import OpenAIEmbeddings
 from langchain_ollama import OllamaEmbeddings
 
@@ -25,6 +27,61 @@ from app.core.logger import get_logger
 from app.lg_agent.lg_prompts import POLICY_RAG_SYSTEM_PROMPT
 
 logger = get_logger(service="policy_rag")
+
+class APIReranker(BaseDocumentCompressor):
+    """Rerank documents through an OpenAI-compatible /rerank endpoint (SiliconFlow, Jina, ...).
+
+    Replaces the in-process HuggingFace cross-encoder: no model download, no local
+    inference, one HTTP call per query.
+    """
+
+    base_url: str
+    api_key: str
+    model: str
+    top_n: int = 5
+    timeout: float = 30.0
+
+    def _payload(self, query: str, documents):
+        return {
+            "model": self.model,
+            "query": query,
+            "documents": [d.page_content for d in documents],
+            "top_n": min(self.top_n, len(documents)),
+            "return_documents": False,
+        }
+
+    def _select(self, documents, data):
+        out = []
+        for r in data.get("results", []):
+            doc = documents[r["index"]]
+            doc.metadata["relevance_score"] = r.get("relevance_score")
+            out.append(doc)
+        return out
+
+    def compress_documents(self, documents, query, callbacks=None):
+        if not documents:
+            return []
+        resp = httpx.post(
+            f"{self.base_url.rstrip('/')}/rerank",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json=self._payload(query, list(documents)),
+            timeout=self.timeout,
+        )
+        resp.raise_for_status()
+        return self._select(list(documents), resp.json())
+
+    async def acompress_documents(self, documents, query, callbacks=None):
+        if not documents:
+            return []
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            resp = await client.post(
+                f"{self.base_url.rstrip('/')}/rerank",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json=self._payload(query, list(documents)),
+            )
+        resp.raise_for_status()
+        return self._select(list(documents), resp.json())
+
 
 class PolicyRAGService:
     """
@@ -50,6 +107,9 @@ class PolicyRAGService:
         settings.QDRANT_LOCAL_DIR.mkdir(parents=True, exist_ok=True)
         self.client = QdrantClient(path=str(settings.QDRANT_LOCAL_DIR))
         self.vector_store = None
+        # Built once per process: BM25 corpus and the reranker (see _policy_chunks / _get_reranker).
+        self._chunks_cache: Optional[List[Document]] = None
+        self._reranker = None
 
     def _get_vector_store(self) -> QdrantVectorStore:
         if self.vector_store is None:
@@ -71,7 +131,11 @@ class PolicyRAGService:
         if settings.AGENT_SERVICE == ServiceType.OPENAI:
             return OpenAIEmbeddings(
                 api_key=settings.OPENAI_API_KEY,
-                model="text-embedding-3-small",
+                base_url=settings.OPENAI_BASE_URL,
+                model=settings.OPENAI_EMBEDDING_MODEL,
+                # OpenAI-compatible providers (SiliconFlow etc.) reject tokenized
+                # input; send plain strings instead of tiktoken ids.
+                check_embedding_ctx_length=False,
             )
 
         return OllamaEmbeddings(
@@ -312,8 +376,7 @@ class PolicyRAGService:
         For large production systems, replace this with Elasticsearch/OpenSearch.
         """
 
-        docs = self.load_policy_documents()
-        chunks = self.split_documents(docs)
+        chunks = self._policy_chunks()
 
         metadata_filter = self._infer_metadata_filter(query)
         filtered_chunks = self._apply_metadata_filter_to_docs(
@@ -350,17 +413,32 @@ class PolicyRAGService:
             weights=[0.6, 0.4],
         )
 
+    def _policy_chunks(self) -> List[Document]:
+        """Load + split the policy corpus once; BM25 used to re-parse every PDF on each query."""
+        if self._chunks_cache is None:
+            self._chunks_cache = self.split_documents(self.load_policy_documents())
+        return self._chunks_cache
+
+    def _get_reranker(self):
+        """API reranker on OpenAI-compatible endpoints; local cross-encoder otherwise."""
+        if self._reranker is None:
+            if settings.AGENT_SERVICE == ServiceType.OPENAI:
+                self._reranker = APIReranker(
+                    base_url=settings.OPENAI_BASE_URL,
+                    api_key=settings.OPENAI_API_KEY,
+                    model=settings.RERANK_MODEL,
+                    top_n=settings.POLICY_RERANK_TOP_N,
+                )
+            else:
+                self._reranker = CrossEncoderReranker(
+                    model=HuggingFaceCrossEncoder(model_name="BAAI/bge-reranker-base"),
+                    top_n=settings.POLICY_RERANK_TOP_N,
+                )
+        return self._reranker
+
     def _build_rerank_retriever(self, query: str):
         hybrid_retriever = self._build_hybrid_retriever(query)
-
-        reranker_model = HuggingFaceCrossEncoder(
-            model_name="BAAI/bge-reranker-base"
-        )
-
-        compressor = CrossEncoderReranker(
-            model=reranker_model,
-            top_n=settings.POLICY_RERANK_TOP_N,
-        )
+        compressor = self._get_reranker()
 
         return ContextualCompressionRetriever(
             base_retriever=hybrid_retriever,
@@ -448,7 +526,8 @@ class PolicyRAGService:
             ]
         )
 
-        chain = prompt | model
+        # Tagged so the SSE layer does not stream the IN_SCOPE / OUT_OF_SCOPE label to the user.
+        chain = prompt | model.with_config(tags=["guardrail"])
         response = await chain.ainvoke({"query": query})
 
         result = response.content.strip().upper()

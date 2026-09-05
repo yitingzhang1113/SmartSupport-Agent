@@ -1,0 +1,4 @@
+{"category": "policy", "subtype": "return_window", "question": "How many days do I have to return a product after it is delivered?", "gold": [["30 calendar days", "30 days", "thirty days"]], "scoring": "policy", "id": "q053"}
+{"category": "policy", "subtype": "damage_report_window", "question": "If my package arrives damaged, how soon do I need to report it?", "gold": [["7 calendar days", "7 days", "seven days"]], "scoring": "policy", "id": "q054"}
+{"category": "policy", "subtype": "restocking_fee", "question": "Do you charge a restocking fee on returns?", "gold": [["not normally", "does not normally", "no restocking fee", "may apply", "certain"]], "scoring": "policy", "id": "q055"}
+{"category": "policy", "subtype": "restocking_exceptions", "question": "Is a restocking fee charged if you shipped me the wrong item?", "gold": [["not normally charged", "no restocking fee", "not charged", "store error", "wrong item"]], "scoring": "policy", "id": "q056"}

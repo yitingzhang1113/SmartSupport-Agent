@@ -695,7 +695,7 @@ async def langgraph_query(
                 yield f"data: {done_json}\n\n"
 
             except Exception as stream_error:
-                logger.error(f"LangGraph stream error: {stream_error}",exc_info=True)
+                logger.opt(exception=True).error("LangGraph stream error: {}", str(stream_error))
 
                 error_json = json.dumps(
                     {

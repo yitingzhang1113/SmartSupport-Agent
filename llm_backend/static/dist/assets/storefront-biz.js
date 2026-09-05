@@ -56,9 +56,18 @@
   var ALL = null, allPromise = null;
   function loadAll() {
     if (allPromise) return allPromise;
-    allPromise = fetch(API_PRODUCTS + "?limit=200").then(function (r) { return r.json(); })
-      .then(function (d) { ALL = (d && d.items) || []; return ALL; })
-      .catch(function () { allPromise = null; return []; });
+    function attempt(n) {
+      return fetch(API_PRODUCTS + "?limit=200", { cache: "no-store" })
+        .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then(function (d) { ALL = (d && d.items) || []; return ALL; })
+        .catch(function (e) {
+          if (n > 0) return new Promise(function (res) { setTimeout(res, 800); }).then(function () { return attempt(n - 1); });
+          allPromise = null;            // 允许后续再次尝试
+          ALL = ALL || [];              // 失败也退化成空数组,避免 .slice() 崩溃
+          return ALL;
+        });
+    }
+    allPromise = attempt(5);
     return allPromise;
   }
   function findProduct(name) { if (!ALL) return null; for (var i = 0; i < ALL.length; i++) if (ALL[i].name === name) return ALL[i]; return null; }
@@ -234,7 +243,7 @@
   function buildShop() {
     if (shop) return;
     shop = document.createElement("div"); shop.id = "hz-shop";
-    shop.innerHTML = '<div class="hz-announce">Free shipping on orders over ¥999</div>' + headerHTML() + '<main id="hz-main"></main>';
+    shop.innerHTML = '<div class="hz-announce"><span class="hz-announce-mid">Free shipping on orders over ¥999</span><a class="hz-announce-back" href="/">← Back to SmartSupport Assistant</a></div>' + headerHTML() + '<main id="hz-main"></main>';
     var fab = document.createElement("button"); fab.className = "hz-cs-fab"; fab.setAttribute("data-hz", "support");
     fab.innerHTML = SVG.chat + "<span>Need help?</span>";
     shop.appendChild(fab);
@@ -458,7 +467,7 @@
     "html.hz-lock,html.hz-lock body{overflow:auto}" +
     "#hz-shop{display:none;position:fixed;inset:0;overflow-y:auto;z-index:9000;background:var(--hz-bg);color:var(--hz-ink);font-family:'Helvetica Neue',Helvetica,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased}" +
     "#hz-shop button{font-family:inherit}" +
-    ".hz-announce{background:var(--hz-ink);color:#fff;text-align:center;font-size:11px;letter-spacing:.1em;padding:8px 12px;text-transform:uppercase}" +
+    ".hz-announce{position:relative;background:var(--hz-ink);color:#fff;text-align:center;font-size:11px;letter-spacing:.1em;padding:8px 12px;text-transform:uppercase}.hz-announce-back{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#fff;text-decoration:none;opacity:.85;font-weight:600}.hz-announce-back:hover{opacity:1;text-decoration:underline}@media(max-width:700px){.hz-announce-mid{display:none}.hz-announce-back{position:static;transform:none}}" +
     // 顶栏
     ".hz-head{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--hz-line)}" +
     ".hz-head-in{max-width:1280px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:32px}" +

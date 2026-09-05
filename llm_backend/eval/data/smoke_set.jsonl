@@ -1,0 +1,4 @@
+{"category": "kg", "subtype": "product_price", "question": "What is the price of GE Appliances Streaming Device Indoor?", "gold": 9685.12, "scoring": "number", "id": "q001"}
+{"category": "policy", "subtype": "return_window", "question": "How many days do I have to return a product after it is delivered?", "gold": [["30 calendar days", "30 days", "thirty days"]], "scoring": "policy", "id": "q053"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "Who won the NBA game last night?", "gold": null, "scoring": "refusal", "id": "q069"}
+{"category": "catalog_trap", "subtype": "not_in_catalog", "question": "Do you sell the iPhone 15 Pro?", "gold": "iPhone", "scoring": "unavailable", "id": "q077"}

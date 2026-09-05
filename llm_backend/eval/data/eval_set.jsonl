@@ -1,0 +1,80 @@
+{"category": "kg", "subtype": "product_price", "question": "What is the price of GE Appliances Streaming Device Indoor?", "gold": 9685.12, "scoring": "number", "id": "q001"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of Eufy Smart Speaker Essential?", "gold": 2722.55, "scoring": "number", "id": "q002"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of Ecobee Home Hub Max?", "gold": 3626.85, "scoring": "number", "id": "q003"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of Eufy Smart Thermostat Ultra?", "gold": 1668.64, "scoring": "number", "id": "q004"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of Arlo Robot Vacuum Mini?", "gold": 275.83, "scoring": "number", "id": "q005"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of LG Electronics Home Hub Ultra?", "gold": 8405.37, "scoring": "number", "id": "q006"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of Honeywell Home Security System Pro?", "gold": 515.38, "scoring": "number", "id": "q007"}
+{"category": "kg", "subtype": "product_price", "question": "What is the price of Arlo Smart Lock Ultra?", "gold": 5828.32, "scoring": "number", "id": "q008"}
+{"category": "kg", "subtype": "product_stock", "question": "How many units of Eufy Smart Thermostat Ultra are in stock?", "gold": 907, "scoring": "number", "id": "q009"}
+{"category": "kg", "subtype": "product_stock", "question": "How many units of LG Electronics Smart Lock Indoor are in stock?", "gold": 19, "scoring": "number", "id": "q010"}
+{"category": "kg", "subtype": "product_stock", "question": "How many units of Ring Home Hub Pro are in stock?", "gold": 962, "scoring": "number", "id": "q011"}
+{"category": "kg", "subtype": "product_stock", "question": "How many units of Honeywell Home Smart Plug Essential are in stock?", "gold": 735, "scoring": "number", "id": "q012"}
+{"category": "kg", "subtype": "product_stock", "question": "How many units of Honeywell Home Home Hub Indoor are in stock?", "gold": 835, "scoring": "number", "id": "q013"}
+{"category": "kg", "subtype": "product_stock", "question": "How many units of Arlo Smart Lighting Outdoor are in stock?", "gold": 86, "scoring": "number", "id": "q014"}
+{"category": "kg", "subtype": "product_supplier", "question": "Which brand supplies Honeywell Home Smart Speaker Plus?", "gold": "Honeywell Home", "scoring": "text", "id": "q015"}
+{"category": "kg", "subtype": "product_supplier", "question": "Which brand supplies TP-Link Kasa Smart Lighting Mini?", "gold": "TP-Link Kasa", "scoring": "text", "id": "q016"}
+{"category": "kg", "subtype": "product_supplier", "question": "Which brand supplies Ecobee Home Hub Max?", "gold": "Ecobee", "scoring": "text", "id": "q017"}
+{"category": "kg", "subtype": "product_supplier", "question": "Which brand supplies Honeywell Home Home Hub Indoor?", "gold": "Honeywell Home", "scoring": "text", "id": "q018"}
+{"category": "kg", "subtype": "product_supplier", "question": "Which brand supplies Samsung SmartThings Smart Lighting Standard?", "gold": "Samsung SmartThings", "scoring": "text", "id": "q019"}
+{"category": "kg", "subtype": "category_count", "question": "How many products do you have in the Security System category?", "gold": 4, "scoring": "number", "id": "q020"}
+{"category": "kg", "subtype": "category_count", "question": "How many products do you have in the Smart Lock category?", "gold": 6, "scoring": "number", "id": "q021"}
+{"category": "kg", "subtype": "category_count", "question": "How many products do you have in the Smart Plug category?", "gold": 8, "scoring": "number", "id": "q022"}
+{"category": "kg", "subtype": "category_count", "question": "How many products do you have in the Air Purifier category?", "gold": 6, "scoring": "number", "id": "q023"}
+{"category": "kg", "subtype": "category_count", "question": "How many products do you have in the Smart Thermostat category?", "gold": 7, "scoring": "number", "id": "q024"}
+{"category": "kg", "subtype": "category_list", "question": "Which products are in the Smart Sensor category?", "gold": ["Arlo Smart Sensor Indoor", "Samsung SmartThings Smart Sensor Plus"], "scoring": "set", "id": "q025"}
+{"category": "kg", "subtype": "category_list", "question": "Which products are in the Security System category?", "gold": ["Belkin Wemo Security System Pro", "Honeywell Home Security System Pro", "Ring Security System Premium", "TP-Link Kasa Security System Standard"], "scoring": "set", "id": "q026"}
+{"category": "kg", "subtype": "category_list", "question": "Which products are in the Robot Vacuum category?", "gold": ["Arlo Robot Vacuum Mini", "GE Appliances Robot Vacuum Standard", "Philips Hue Robot Vacuum Ultra", "Ring Robot Vacuum Standard"], "scoring": "set", "id": "q027"}
+{"category": "kg", "subtype": "supplier_list", "question": "What products does Amazon Devices supply?", "gold": ["Amazon Devices Air Purifier Outdoor", "Amazon Devices Smart Lighting Indoor"], "scoring": "set", "id": "q028"}
+{"category": "kg", "subtype": "supplier_list", "question": "What products does LG Electronics supply?", "gold": ["LG Electronics Home Hub Ultra", "LG Electronics Smart Doorbell Plus", "LG Electronics Smart Lock Indoor", "LG Electronics Streaming Device Outdoor"], "scoring": "set", "id": "q029"}
+{"category": "kg", "subtype": "supplier_list", "question": "What products does TP-Link Kasa supply?", "gold": ["TP-Link Kasa Air Purifier Max", "TP-Link Kasa Security System Standard", "TP-Link Kasa Smart Lighting Mini", "TP-Link Kasa Smart Plug Plus", "TP-Link Kasa Smart Speaker Outdoor", "TP-Link Kasa Smart Speaker Pro"], "scoring": "set", "id": "q030"}
+{"category": "kg", "subtype": "supplier_list", "question": "What products does Philips Hue supply?", "gold": ["Philips Hue Air Purifier Plus", "Philips Hue Robot Vacuum Ultra", "Philips Hue Smart Lock Max", "Philips Hue Streaming Device Essential"], "scoring": "set", "id": "q031"}
+{"category": "kg", "subtype": "order_items", "question": "What products were in order 267?", "gold": ["Apple Home Smart Display Premium", "GE Appliances Robot Vacuum Standard", "GE Appliances Smart Lock Standard", "Honeywell Home Air Purifier Indoor"], "scoring": "set", "id": "q032"}
+{"category": "kg", "subtype": "order_items", "question": "What products were in order 700?", "gold": ["Arlo Robot Vacuum Mini", "GE Appliances Smart Lock Standard", "GE Appliances Streaming Device Indoor", "Honeywell Home Smart Camera Mini"], "scoring": "set", "id": "q033"}
+{"category": "kg", "subtype": "order_items", "question": "What products were in order 574?", "gold": ["Google Nest Smart Display Standard", "Honeywell Home Home Hub Indoor", "TP-Link Kasa Security System Standard"], "scoring": "set", "id": "q034"}
+{"category": "kg", "subtype": "order_items", "question": "What products were in order 464?", "gold": ["Apple Home Smart Display Max", "Apple Home Smart Doorbell Essential", "Wyze Smart Display Ultra"], "scoring": "set", "id": "q035"}
+{"category": "kg", "subtype": "order_date", "question": "When was order 160 placed?", "gold": "2026-01-27", "scoring": "text", "id": "q036"}
+{"category": "kg", "subtype": "order_date", "question": "When was order 221 placed?", "gold": "2025-12-11", "scoring": "text", "id": "q037"}
+{"category": "kg", "subtype": "order_date", "question": "When was order 981 placed?", "gold": "2025-10-28", "scoring": "text", "id": "q038"}
+{"category": "kg", "subtype": "order_total_qty", "question": "What is the total quantity of items in order 567?", "gold": 23, "scoring": "number", "id": "q039"}
+{"category": "kg", "subtype": "order_total_qty", "question": "What is the total quantity of items in order 182?", "gold": 35, "scoring": "number", "id": "q040"}
+{"category": "kg", "subtype": "order_categories", "question": "Which product categories do the items in order 168 belong to?", "gold": ["Air Purifier", "Robot Vacuum", "Smart Display", "Smart Doorbell"], "scoring": "set", "id": "q041"}
+{"category": "kg", "subtype": "order_categories", "question": "Which product categories do the items in order 631 belong to?", "gold": ["Home Hub", "Smart Display", "Smart Plug", "Smart Thermostat"], "scoring": "set", "id": "q042"}
+{"category": "kg", "subtype": "customer_order_count", "question": "How many orders has the customer Hoffman, Baker and BarnesSecurity Service Provider placed?", "gold": 10, "scoring": "number", "id": "q043"}
+{"category": "kg", "subtype": "customer_order_count", "question": "How many orders has the customer Johnson IncAppliance Retailer placed?", "gold": 9, "scoring": "number", "id": "q044"}
+{"category": "kg", "subtype": "customer_order_count", "question": "How many orders has the customer James PLCRetail Company placed?", "gold": 10, "scoring": "number", "id": "q045"}
+{"category": "kg", "subtype": "aggregate", "question": "Which product is the most expensive in the store?", "gold": "TP-Link Kasa Security System Standard", "scoring": "text", "id": "q046"}
+{"category": "kg", "subtype": "aggregate", "question": "Which product is the cheapest in the store?", "gold": "Ring Smart Speaker Plus", "scoring": "text", "id": "q047"}
+{"category": "kg", "subtype": "aggregate", "question": "How many products are currently out of stock?", "gold": 0, "scoring": "number", "id": "q048"}
+{"category": "kg", "subtype": "review_avg", "question": "What is the average customer rating of Ring Smart Camera Premium?", "gold": 2.96, "scoring": "number", "tolerance": 0.06, "id": "q049"}
+{"category": "kg", "subtype": "review_avg", "question": "What is the average customer rating of Arlo Smart TV Plus?", "gold": 3.12, "scoring": "number", "tolerance": 0.06, "id": "q050"}
+{"category": "kg", "subtype": "review_count", "question": "How many customer reviews does GE Appliances Smart Plug Essential have?", "gold": 57, "scoring": "number", "id": "q051"}
+{"category": "kg", "subtype": "review_count", "question": "How many customer reviews does Amazon Devices Smart Lighting Indoor have?", "gold": 50, "scoring": "number", "id": "q052"}
+{"category": "policy", "subtype": "return_window", "question": "How many days do I have to return a product after it is delivered?", "gold": [["30 calendar days", "30 days", "thirty days"]], "scoring": "policy", "id": "q053"}
+{"category": "policy", "subtype": "damage_report_window", "question": "If my package arrives damaged, how soon do I need to report it?", "gold": [["7 calendar days", "7 days", "seven days"]], "scoring": "policy", "id": "q054"}
+{"category": "policy", "subtype": "restocking_fee", "question": "Do you charge a restocking fee on returns?", "gold": [["not normally", "does not normally", "no restocking fee", "may apply", "certain"]], "scoring": "policy", "id": "q055"}
+{"category": "policy", "subtype": "restocking_exceptions", "question": "Is a restocking fee charged if you shipped me the wrong item?", "gold": [["not normally charged", "no restocking fee", "not charged", "store error", "wrong item"]], "scoring": "policy", "id": "q056"}
+{"category": "policy", "subtype": "refund_timing", "question": "How long does a refund take after you receive my return?", "gold": [["5 business days", "five business days", "10 business days", "ten business days"]], "scoring": "policy", "id": "q057"}
+{"category": "policy", "subtype": "refund_method", "question": "How will my refund be paid?", "gold": [["original payment method"]], "scoring": "policy", "id": "q058"}
+{"category": "policy", "subtype": "non_returnable", "question": "Which items cannot be returned for change of mind?", "gold": [["filter", "dust bag", "mop pad", "custom-cut", "engrav", "subscription", "software", "adhesive"]], "scoring": "policy", "id": "q059"}
+{"category": "policy", "subtype": "factory_reset", "question": "Do I need to do anything to my smart device before returning it?", "gold": [["factory reset", "reset"]], "scoring": "policy", "id": "q060"}
+{"category": "policy", "subtype": "standard_delivery", "question": "How long does standard shipping take after dispatch?", "gold": [["7 business days", "seven business days"]], "scoring": "policy", "id": "q061"}
+{"category": "policy", "subtype": "expedited_delivery", "question": "How long does expedited shipping take?", "gold": [["1-3 business days", "1 to 3 business days", "one to three business days", "1–3 business days"]], "scoring": "policy", "id": "q062"}
+{"category": "policy", "subtype": "cutoff", "question": "What happens if I place an order after the daily cut-off time?", "gold": [["next business day"]], "scoring": "policy", "id": "q063"}
+{"category": "policy", "subtype": "lost_shipment", "question": "When is a shipment considered lost?", "gold": [["carrier confirms", "no movement", "investigation", "returned without"]], "scoring": "policy", "id": "q064"}
+{"category": "policy", "subtype": "privacy_sell", "question": "Do you sell my camera or voice recordings to advertisers?", "gold": [["do not sell", "does not sell", "not sell", "never sell"]], "scoring": "policy", "id": "q065"}
+{"category": "policy", "subtype": "lock_door_thickness", "question": "What door thickness does the SL-500 SecureConnect smart lock support?", "gold": [["1-3/8", "1 3/8", "1.375"], ["2 in", "2 inch", "2\""]], "scoring": "policy", "id": "q066"}
+{"category": "policy", "subtype": "lock_pin_length", "question": "How long can a PIN code be on the SL-500 smart lock?", "gold": [["4 to 10", "4-10", "4–10", "four to ten"]], "scoring": "policy", "id": "q067"}
+{"category": "policy", "subtype": "lock_fingerprints", "question": "How many fingerprints can the SL-500 smart lock store?", "gold": [["100"]], "scoring": "policy", "id": "q068"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "Who won the NBA game last night?", "gold": null, "scoring": "refusal", "id": "q069"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "What is the Bitcoin price today?", "gold": null, "scoring": "refusal", "id": "q070"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "Write me a Python function that computes Fibonacci numbers.", "gold": null, "scoring": "refusal", "id": "q071"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "What is the capital of France?", "gold": null, "scoring": "refusal", "id": "q072"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "What will the weather be like tomorrow in Los Angeles?", "gold": null, "scoring": "refusal", "id": "q073"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "Give me a recipe for chocolate cake.", "gold": null, "scoring": "refusal", "id": "q074"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "Recommend a good movie to watch tonight.", "gold": null, "scoring": "refusal", "id": "q075"}
+{"category": "out_of_scope", "subtype": "unrelated", "question": "What is the correct dosage of ibuprofen for an adult?", "gold": null, "scoring": "refusal", "id": "q076"}
+{"category": "catalog_trap", "subtype": "not_in_catalog", "question": "Do you sell the iPhone 15 Pro?", "gold": "iPhone", "scoring": "unavailable", "id": "q077"}
+{"category": "catalog_trap", "subtype": "not_in_catalog", "question": "How much is the Dyson V15 Detect vacuum?", "gold": "Dyson V15", "scoring": "unavailable", "id": "q078"}
+{"category": "catalog_trap", "subtype": "not_in_catalog", "question": "What is the price of the Tesla Powerwall?", "gold": "Tesla Powerwall", "scoring": "unavailable", "id": "q079"}
+{"category": "catalog_trap", "subtype": "not_in_catalog", "question": "Do you have a product called Quantum Refrigerator in stock?", "gold": "Quantum Refrigerator", "scoring": "unavailable", "id": "q080"}

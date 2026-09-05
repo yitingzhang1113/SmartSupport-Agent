@@ -15,6 +15,13 @@ class Settings(BaseSettings):
     # OpenAI settings
     OPENAI_API_KEY: str
     OPENAI_MODEL: str
+    # Any OpenAI-compatible endpoint (SiliconFlow, DeepSeek, ...). Exported to the
+    # environment below so every OpenAI/LangChain client picks it up.
+    OPENAI_BASE_URL: str = "https://api.openai.com/v1"
+    # Embedding model on the same endpoint (e.g. BAAI/bge-m3 on SiliconFlow).
+    OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
+    # Rerank model on the same endpoint (SiliconFlow exposes /rerank).
+    RERANK_MODEL: str = "BAAI/bge-reranker-v2-m3"
 
     # Deepseek settings
     DEEPSEEK_API_KEY: str
@@ -117,4 +124,10 @@ class Settings(BaseSettings):
     def QDRANT_LOCAL_DIR(self) -> Path:
         return ROOT_DIR / self.QDRANT_LOCAL_PATH
 
-settings = Settings() 
+settings = Settings()
+
+# The openai SDK reads OPENAI_BASE_URL and langchain-openai reads OPENAI_API_BASE.
+# Setting both here means no construction site has to remember to pass base_url.
+import os as _os
+_os.environ.setdefault("OPENAI_BASE_URL", settings.OPENAI_BASE_URL)
+_os.environ.setdefault("OPENAI_API_BASE", settings.OPENAI_BASE_URL)
