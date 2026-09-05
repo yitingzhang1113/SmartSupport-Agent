@@ -243,26 +243,43 @@ def _load_products():
     return products
 
 
+import re as _re
+
+
+def _norm_name(s: str) -> str:
+    """归一化:去掉开头的 数字+分隔符 前缀,把 _ / - 当空格,合并空格,小写。
+    这样 '002_Samsung_SmartThings_Smart_Sensor_Plus' 与
+    'Samsung SmartThings Smart Sensor Plus' 能匹配上。"""
+    s = _re.sub(r"^\d+[\s_\-]+", "", s.strip())
+    s = _re.sub(r"[_\-]+", " ", s)
+    s = _re.sub(r"\s+", " ", s)
+    return s.lower()
+
+
 def _image_index():
-    """扫描 products_image 目录,返回 {商品名小写: /product-images/文件名}。
-    每次调用实时扫描(文件不多),用户新增图片无需重启。"""
-    idx = {}
+    """扫描 products_image 目录,返回 (精确映射, 归一化映射)。
+    每次调用实时扫描(文件不多),用户新增图片无需重启。
+    文件名支持:'商品名.png' 或 '编号_商品名带下划线.png'。"""
+    from urllib.parse import quote
+    exact, norm = {}, {}
     if not PRODUCT_IMAGE_DIR.exists():
-        return idx
+        return exact, norm
     exts = {".png", ".jpg", ".jpeg", ".webp"}
     for p in PRODUCT_IMAGE_DIR.iterdir():
         if p.suffix.lower() in exts:
-            from urllib.parse import quote
-            idx[p.stem.strip().lower()] = "/product-images/" + quote(p.name)
-    return idx
+            url = "/product-images/" + quote(p.name)
+            exact[p.stem.strip().lower()] = url
+            norm.setdefault(_norm_name(p.stem), url)
+    return exact, norm
 
 
 def _attach_images(items):
-    idx = _image_index()
+    exact, norm = _image_index()
     out = []
     for p in items:
         q = dict(p)
-        q["image"] = idx.get(p["name"].strip().lower())
+        name = p["name"].strip()
+        q["image"] = exact.get(name.lower()) or norm.get(_norm_name(name))
         out.append(q)
     return out
 
